@@ -1,5 +1,30 @@
 # 무료 쿠폰 이벤트 페이지
 
+## 실행
+### pyenv + pipenv 설치
+
+```bash
+brew install pyenv pipenv
+```
+
+```bash
+pipenv shell
+```
+
+```bash
+pipenv install
+```
+
+### 가상환경에서 작업
+```bash
+pipenv shell
+```
+
+### 서버 실행
+```bash
+python manage.py runserver
+```
+
 ## apps
 
 ### promotion
