@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>이벤트 페이지 입니다</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+{% if is_expired %}
+    종료된 이벤트입니다
+{% else %}
+    {% if products %}
+        <ul>
+        {% for product in products %}
+            <li>{{ product.name }} :
+                {% if product.coupon_remain > 0 %}
+                    <a href="javascript:post_coupon_authority('{{ coupon_id }}', '{{ product.id }}', '{{ csrf_token }}')">쿠폰 발급</a></li>
+                {% else %}
+                    준비한 쿠폰이 모두 소진되었어요
+                {% endif %}
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>쿠폰 발급 가능한 작품이 없습니다.</p>
+    {% endif %}
+{% endif %}
+</body>
+<script type="text/javascript">
+    function post_coupon_authority(coupon_id, product_id, csrf_token) {
+        $.ajax({
+            type: "POST",
+            url: "/api/coupon_authority/",
+            data: {"coupon_id": coupon_id, "product_id": product_id},
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        }).done(function(response) {
+            alert("쿠폰 발급을 완료하였습니다");
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+
+            const status = jqXHR.status;
+            const responseData = jqXHR.responseJSON;
+
+            alert(responseData.detail)
+        });
+    }
+
+</script>
+</html>
